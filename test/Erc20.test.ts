@@ -2,7 +2,7 @@ import { BigNumberish } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Erc20 } from "../typechain"
+import { Erc20 } from "../typechain";
 
 describe("Erc20", async () => {
   let contract: Erc20;
@@ -16,7 +16,7 @@ describe("Erc20", async () => {
     await contract.deployed();
     decimal = await contract.decimals();
     [owner, addr1] = await ethers.getSigners();
-    contract.connect(owner)
+    contract.connect(owner);
   });
 
   it("mint", async () => {
@@ -26,7 +26,7 @@ describe("Erc20", async () => {
     expect(await contract.balanceOf(owner.address)).to.equal(num);
   });
 
-  it("transfer",  async function () {
+  it("transfer", async function () {
     const supply = ethers.utils.parseUnits("1", decimal);
     const trans = ethers.utils.parseUnits("0.5", decimal);
     await contract.mint(owner.address, supply);
@@ -35,7 +35,7 @@ describe("Erc20", async () => {
     expect(await contract.balanceOf(addr1.address)).to.equal(trans);
   });
 
-  it("approve & transferFrom",  async function () {
+  it("approve & transferFrom", async function () {
     const supply = ethers.utils.parseUnits("1", decimal);
     const trans = ethers.utils.parseUnits("0.5", decimal);
     await contract.mint(owner.address, supply);
@@ -43,19 +43,25 @@ describe("Erc20", async () => {
     expect(await contract.balanceOf(addr1.address)).to.equal(trans);
 
     // ownerがaddr1からtransfer(失敗)
-    const res1 = await contract.connect(owner)
+    const res1 = await contract
+      .connect(owner)
       .transferFrom(addr1.address, owner.address, trans)
-      .then(() => true).catch(() => false);
+      .then(() => true)
+      .catch(() => false);
     expect(res1).to.false;
 
     // approve
     await contract.connect(addr1).approve(owner.address, supply);
-    expect(await contract.allowance(addr1.address, owner.address)).to.equal(supply);
+    expect(await contract.allowance(addr1.address, owner.address)).to.equal(
+      supply
+    );
 
     // ownerがaddr1からtransfer(成功)
-    const res2 = await contract.connect(owner)
+    const res2 = await contract
+      .connect(owner)
       .transferFrom(addr1.address, owner.address, trans)
-      .then(() => true).catch(() => false);
+      .then(() => true)
+      .catch(() => false);
     expect(res2).to.true;
     expect(await contract.balanceOf(owner.address)).to.equal(supply);
     expect(await contract.balanceOf(addr1.address)).to.equal(0);
