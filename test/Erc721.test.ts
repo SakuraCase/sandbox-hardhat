@@ -17,10 +17,13 @@ describe("Erc721", async () => {
   });
 
   it("mint", async () => {
-    await contract.mint(owner.address);
+    await contract.safeMint(owner.address, 0);
     expect(await contract.totalSupply()).to.equal(1);
     expect(await contract.balanceOf(owner.address)).to.equal(1);
     expect(await contract.balanceOf(addr1.address)).to.equal(0);
     expect(await contract.ownerOf(0)).to.equal(owner.address);
+    expect(await contract.tokenURI(0)).to.equal(
+      "https://github.com/SakuraCase/sandbox-solidity/tree/main/metadata/erc721/0.json"
+    );
   });
 });
