@@ -14,7 +14,7 @@ contract Erc721 is ERC721, ERC721Enumerable, Pausable, Ownable {
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
         
-        return string(abi.encodePacked("https://github.com/SakuraCase/sandbox-solidity/tree/main/metadata/erc721/", tokenId.toString(), ".json"));
+        return string(abi.encodePacked("https://raw.githubusercontent.com/SakuraCase/sandbox-solidity/main/metadata/erc721/", tokenId.toString(), ".json"));
     }
 
     function pause() public onlyOwner {

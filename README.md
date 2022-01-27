@@ -54,3 +54,8 @@ For faster runs of your tests and scripts, consider skipping ts-node's type chec
 npx hardhat compile
 npx hardhat test # or npx hardhat test test/sample-test.js
 ```
+
+```shell
+npx hardhat node
+npx hardhat run --network localhost scripts/X.ts
+```
