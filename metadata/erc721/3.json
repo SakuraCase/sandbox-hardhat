@@ -1,7 +1,7 @@
 {
     "description": "test", 
-    "external_url": "https://github.com/SakuraCase/sandbox-solidity", 
-    "image": "https://github.com/SakuraCase/sandbox-solidity/tree/main/metadata/images/3.png", 
+    "external_url": "https://github.com/SakuraCase/sandbox-solidity/blob/main/contracts/Erc721.sol", 
+    "image": "https://raw.githubusercontent.com/SakuraCase/sandbox-solidity/main/metadata/images/3.png", 
     "name": "TestERC721-3",
     "attributes": [
         {
