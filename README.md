@@ -47,15 +47,19 @@ For faster runs of your tests and scripts, consider skipping ts-node's type chec
 
 
 # Memo
-- https://qiita.com/FinanceMofumofu/items/a46488333fbee819bb01
 - https://docs.openzeppelin.com/contracts/4.x/wizard
+- https://qiita.com/FinanceMofumofu/items/a46488333fbee819bb01
 
-```shell
+```shell:build
 npx hardhat compile
 npx hardhat test # or npx hardhat test test/sample-test.js
 ```
 
-```shell
+```shell:scripts
 npx hardhat node
 npx hardhat run --network localhost scripts/X.ts
+```
+
+```shell:ethescan_verify
+npx hardhat verify --network rinkeby --contract contracts/Hoge.sol:Fuga 0x0000000000000000000000000000000000000000
 ```
