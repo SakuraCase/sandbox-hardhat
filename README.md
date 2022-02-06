@@ -51,7 +51,7 @@ For faster runs of your tests and scripts, consider skipping ts-node's type chec
 - https://qiita.com/FinanceMofumofu/items/a46488333fbee819bb01
 
 ```shell:build
-npx hardhat compile
+npx hardhat compile # --force
 npx hardhat test # or npx hardhat test test/sample-test.js
 ```
 
