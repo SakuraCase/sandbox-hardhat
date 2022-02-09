@@ -28,11 +28,23 @@ const config: HardhatUserConfig = {
       {
         version: "0.8.4",
       },
+      {
+        version: "0.6.12",
+      },
     ],
     overrides: {
       "contracts/research/StakingRewards.sol": {
         version: "0.5.16",
         settings: {},
+      },
+      "contracts/research/MiniChefV2.sol": {
+        version: "0.6.12",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
       },
     },
   },

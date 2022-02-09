@@ -1,6 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Contract } from "ethers";
 import { ethers, network } from "hardhat";
+import { nextBlockMine, balanceOf } from "../utils";
 
 async function main() {
   // 手動マイニング設定
@@ -13,8 +14,8 @@ async function main() {
   console.log(`tester3: ${tester3.address}`);
 
   // deploy erc20
-  const contractErc20 = await ethers.getContractFactory("Erc20", deployer);
-  const erc20 = await contractErc20.deploy();
+  const factoryErc20 = await ethers.getContractFactory("Erc20", deployer);
+  const erc20 = await factoryErc20.deploy();
   await nextBlockMine();
 
   // deploy staking contract
@@ -28,7 +29,7 @@ async function main() {
     erc20.address
   );
   await nextBlockMine();
-  await balanceOf(erc20, stakingRewards, deployer, tester1, tester2, tester3);
+  await showBalance(erc20, stakingRewards, deployer, tester1, tester2, tester3);
 
   // erc20の転送
   const decimals = 1;
@@ -40,7 +41,7 @@ async function main() {
   await erc20.transfer(tester3.address, token100);
   await erc20.transfer(stakingRewards.address, token100.mul(6));
   await nextBlockMine();
-  await balanceOf(erc20, stakingRewards, deployer, tester1, tester2, tester3);
+  await showBalance(erc20, stakingRewards, deployer, tester1, tester2, tester3);
 
   // t=0 settings
   await stakingRewards.notifyRewardAmount(token100.mul(3));
@@ -70,7 +71,7 @@ async function main() {
   // t=6
   await stakingRewards.connect(tester2).exit();
   await nextBlockMine();
-  await balanceOf(erc20, stakingRewards, deployer, tester1, tester2, tester3);
+  await showBalance(erc20, stakingRewards, deployer, tester1, tester2, tester3);
 
   // t=7
   await nextBlockMine();
@@ -85,15 +86,15 @@ async function main() {
   // t=10
   await stakingRewards.connect(tester1).exit();
   await nextBlockMine();
-  await balanceOf(erc20, stakingRewards, deployer, tester1, tester2, tester3);
+  await showBalance(erc20, stakingRewards, deployer, tester1, tester2, tester3);
 
   // t=11
   await stakingRewards.connect(tester3).exit();
   await nextBlockMine();
-  await balanceOf(erc20, stakingRewards, deployer, tester1, tester2, tester3);
+  await showBalance(erc20, stakingRewards, deployer, tester1, tester2, tester3);
 }
 
-async function balanceOf(
+async function showBalance(
   erc20: Contract,
   staking: Contract,
   add1: SignerWithAddress,
@@ -101,26 +102,14 @@ async function balanceOf(
   add3: SignerWithAddress,
   add4: SignerWithAddress
 ) {
-  const b1 = await erc20.balanceOf(staking.address);
-  const b2 = await erc20.balanceOf(add1.address);
-  const b3 = await erc20.balanceOf(add2.address);
-  const b4 = await erc20.balanceOf(add3.address);
-  const b5 = await erc20.balanceOf(add4.address);
-  console.log("balanceOf: ", b1, b2, b3, b4, b5);
-}
-
-async function nextBlockMine() {
-  const time = await getNextBlockTimestamp();
-  await network.provider.send("evm_setNextBlockTimestamp", [time]);
-  await network.provider.send("evm_mine");
-}
-
-async function getNextBlockTimestamp() {
-  const blockNum = await ethers.provider.getBlockNumber();
-  const block = await ethers.provider.getBlock(blockNum);
-  const timestamp = block.timestamp;
-  console.log("blcok info: ", blockNum, timestamp);
-  return timestamp + 1;
+  balanceOf(
+    erc20,
+    staking.address,
+    add1.address,
+    add2.address,
+    add3.address,
+    add4.address
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
